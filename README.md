@@ -1,39 +1,86 @@
 # Machine Dialectology
 
-Official code repository for **When LLMs Develop Languages: Symbolic Communication for Efficient Multi-Agent Reasoning** accepted by ICML 2026.
+Code repository for **LLM-generated symbolic languages for efficient reasoning**.
 
-This repository contains preliminary code for **Communicative Language Symbolism Routing (CLSR)**, a test-time reasoning framework where LLM agents automatically invent, evolve, and reuse compact **Language Symbolism Frameworks (LSFs)** to improve the accuracy–token trade-off of LLM reasoning.
+This repository currently contains two closely related lines of work:
 
-> **Note:** this repository is still being updated. Some scripts, results, and documentation are not yet fully cleaned or finalized.
+1. **CLSR**: a framework called Communicative Language Symbolism Routing, associated with our ICML 2026 paper  
+   **When LLMs Develop Languages: Symbolic Communication for Efficient Multi-Agent Reasoning**.
+
+2. **MDia**: an upgraded and more general framework, tentatively titled  
+   **Machine Dialectology**, which extends CLSR to multi-model, multi-agent, and cross-category symbolic language evolution.
+
+> **Note:** this repository is still being updated. Some scripts, results, and reproduction instructions are not yet fully cleaned or finalized.
 
 ## Overview
 
-Large language models often use long natural-language Chain-of-Thought traces for difficult reasoning tasks. CLSR explores a different direction: letting LLM agents develop compact machine-oriented symbolic dialects, called **Language Symbolism Frameworks (LSFs)**, and use them as reusable reasoning protocols.
+Large language models often rely on long natural-language Chain-of-Thought traces for difficult reasoning tasks. This repository explores an alternative direction: letting LLM agents develop compact machine-oriented symbolic dialects, called **Language Symbolism Frameworks (LSFs)**, and use them as reusable reasoning protocols.
 
-The current code mainly supports:
-
-1. **LSF synthesis**: generate compact symbolic reasoning protocols from high-quality examples.
-2. **LSF evolution**: analyze failure cases and iteratively update LSFs.
-3. **LSF-conditioned solving**: solve benchmark questions using an evolved LSF.
-4. **Evaluation**: compare raw LLM outputs and LSF-based outputs on reasoning benchmarks.
+The core idea is that LLMs may not need to express all reasoning steps in verbose natural language. Instead, they can develop compact symbolic conventions that preserve reasoning ability while reducing generated tokens.
 
 ## Repository Structure
 
 ```text
 LSF_MDia/
-├── LSF-v0-draft/          # Early prototype scripts
-│
-└── LSF-v1/                # Current working version
-    ├── evolve_LSF_apr21.py        # LSF synthesis and evolution
-    ├── eval_LSFs_apr21.py         # LSF-based evaluation
-    ├── llm_utils/                 # Data loading and evaluation utilities
-    ├── lsf_evolve_records/        # Example evolved LSF records
-    ├── raw_llm_preds/             # Raw LLM prediction records
-    ├── single_lsf_preds/          # Single-LSF evaluation outputs
-    └── routed_lsf_preds/          # Routed-LSF evaluation outputs
+├── LSF-v0-draft/          # Early prototype scripts for CLSR
+│  
+└── LSF-v1/                # MDia prototype: generalized Machine Dialectology framework
+    ├── evolve_LSF_apr21.py
+    ├── eval_LSFs_apr21.py
+    ├── llm_utils/
+    ├── lsf_evolve_records/
+    ├── raw_llm_preds/
+    ├── single_lsf_preds/
+    └── routed_lsf_preds/
 ```
 
-Some folders and scripts are still being reorganized. A cleaner structure will be provided in a later update.
+## CLSR: ICML 2026 Version
+
+CLSR, short for **Communicative Language Symbolism Routing**, studies how LLM agents can generate and evolve compact symbolic reasoning protocols.
+
+In CLSR, a specific type of LLM agent first generates initial LSFs from exemplars. These LSFs are then used to produce responses, and the system iteratively refines the symbolic protocols based on correctness and token efficiency.
+
+The basic CLSR workflow is:
+
+1. sample exemplar questions and answers;
+2. generate initial LSFs;
+3. use the LSFs to answer benchmark questions;
+4. select concise and correct responses;
+5. iteratively evolve the LSFs;
+6. evaluate the final LSFs on reasoning benchmarks.
+
+## MDia: Machine Dialectology
+
+`LSF-v1/` is an upgraded version of CLSR, tentatively named **MDia** or **Machine Dialectology**.
+
+MDia generalizes CLSR from a single-type LLM-agent setting to a broader multi-agent and cross-category setting. Instead of first generating initial LSFs from exemplars, MDia lets multiple types of LLM agents directly attempt the query, collects the most concise and correct responses across different models, and then lets agents discuss and synthesize suitable LSFs for their own reasoning styles.
+
+The high-level MDia workflow is:
+
+1. multiple heterogeneous LLM agents answer the query directly;
+2. concise and correct responses are selected across agents;
+3. agents discuss these high-leverage responses;
+4. each agent generates or updates its own LSF;
+5. agents solve new queries using their corresponding LSFs;
+6. collective discussion and routing further refine the dialect pool.
+
+MDia also introduces **cross-category routing**, where symbolic dialects can be selected or transferred across different task categories.
+
+
+## CLSR vs. MDia
+
+| Aspect | CLSR | MDia / Machine Dialectology |
+|---|---|---|
+| Main status | ICML 2026 accepted paper | Ongoing journal-level extension |
+| Core idea | LLM-generated LSFs for efficient reasoning | Machine dialectology across heterogeneous LLM agents |
+| Agent setting | A specific type of LLM agent | Multiple different types of LLM agents |
+| Initial step | Generate initial LSFs from exemplars | Agents first answer queries directly |
+| Evolution signal | Correct and concise LSF-conditioned responses | Correct and concise responses collected across heterogeneous agents |
+| Discussion pattern | Same-type LLM-to-LLM refinement | Cross-model and cross-category discussion |
+| Routing | LSF routing for reasoning efficiency | Cross-category and cross-agent dialect routing |
+| Experimental scope | ICML version experiments | Broader and larger-scale LLM experiments |
+
+In short, **MDia can be viewed as a generalization of CLSR**. CLSR focuses on symbolic communication routing for efficient reasoning, while MDia studies a broader setting in which different LLM communities develop, exchange, and route machine dialects.
 
 ## Installation
 
@@ -54,7 +101,7 @@ A finalized `requirements.txt` will be added later.
 
 ## API Setup
 
-The current implementation uses an OpenAI-compatible chat-completion interface. For example, the scripts can be configured with a SiliconFlow-compatible endpoint:
+The current scripts use an OpenAI-compatible chat-completion interface. For example, some scripts are configured with a SiliconFlow-compatible endpoint:
 
 ```python
 from openai import OpenAI
@@ -69,25 +116,22 @@ Please replace `"YOUR_API_KEY"` with your own API key before running the scripts
 
 ## Basic Usage
 
-### 1. Evolve an LSF
-
 ```bash
 cd LSF-v1
 python evolve_LSF_apr21.py
 ```
 
-This script performs an iterative LSF evolution loop. It samples high-quality examples, generates an initial LSF, solves new questions with the current LSF, analyzes failure cases, and updates the LSF.
+To evaluate evolved LSFs:
 
-Important configurable variables include:
-
-```python
-cur_llm = "Qwen/Qwen3.5-35B-A3B"
-_dataCard = "aime"
-NUM_SAMPLE = 9
-NUM_EVOLVE = 20
+```bash
+python eval_LSFs_apr21.py
 ```
 
-Supported benchmark cards currently include:
+The MDia implementation is still under active development. Some scripts and outputs are preliminary.
+
+## Benchmarks
+
+The current codebase is organized around several reasoning benchmarks, including:
 
 ```text
 mmlu-pro
@@ -99,54 +143,29 @@ sci-qa
 hotpot-qa
 ```
 
-### 2. Evaluate an evolved LSF
-
-```bash
-cd LSF-v1
-python eval_LSFs_apr21.py
-```
-
-This script evaluates selected evolved LSFs on downstream benchmark questions.
-
-The evaluation pipeline is still being cleaned. Detailed reproduction commands will be added later.
-
-## Main Components
-
-### LSF synthesis
-
-The LLM is prompted to design a compact symbolic language from high-quality solved examples. The goal is to preserve reasoning ability while reducing generated tokens.
-
-### LSF-conditioned solving
-
-Given a fixed LSF, the LLM solves a test query using the LSF as faithfully and efficiently as possible.
-
-### Failure analysis
-
-The code analyzes incorrect or inefficient LSF-conditioned outputs and summarizes recurring weaknesses, such as over-compression, ambiguous notation, reasoning-control failures, or answer-formatting failures.
-
-### LSF update
-
-The LLM updates the current LSF using the failure analysis. The update step aims to preserve useful symbolic conventions while fixing failure patterns with minimal changes.
+More complete dataset preparation and preprocessing instructions will be added later.
 
 ## Current Status
 
-The repository currently includes preliminary scripts and records for:
+This repository currently includes:
 
-- LSF generation;
-- LSF evolution;
-- LSF-conditioned reasoning;
+- preliminary CLSR code for the accepted ICML 2026 paper;
+- early MDia code for Machine Dialectology;
+- LSF generation and evolution scripts;
+- LSF-conditioned evaluation scripts;
 - raw LLM prediction records;
-- single-LSF evaluation records;
-- routed/evolved LSF result records.
+- single-LSF and routed-LSF result folders.
 
-There are other components still being updated.
+There are other components still being updated...
+
 
 ## Citation
 
-```bibtex
+If you use the CLSR code, please cite:
 
+```bibtex
 ```
 
 ## Contact
 
-For questions or updates, please open an issue or contact the authors.
+For questions, please open an issue or contact the authors.
