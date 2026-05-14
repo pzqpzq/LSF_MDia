@@ -27,6 +27,7 @@ LSF_MDia/
 └── LSF-v1/                # MDia prototype: generalized Machine Dialectology framework
     ├── evolve_LSF_apr21.py
     ├── eval_LSFs_apr21.py
+    ├── llm_router_reproduce_mdia.py
     ├── llm_utils/
     ├── lsf_evolve_records/
     ├── raw_llm_preds/
@@ -127,6 +128,24 @@ To evaluate evolved LSFs:
 python eval_LSFs_apr21.py
 ```
 
+### The LLM-Router
+
+`llm_router_reproduce_mdia.py` implements the paper-style LLM-router used to implement the query-adaptive CLSR / MDia routing mechanism:
+
+```text
+profile-aware LSF cards
+→ category routing
+→ compact protocol planning
+→ deterministic execution
+→ accuracy / generated-token evaluation
+```
+
+The router supports the three inference modes discussed in the paper:
+
+- `M:S`: single-LSF direct answer;
+- `M:A`: multi-LSF aggregation;
+- `M:C`: multi-round LSF composition.
+
 The MDia implementation is still under active development. Some scripts and outputs are preliminary.
 
 ## Benchmarks
@@ -153,6 +172,7 @@ This repository currently includes:
 - early MDia code for Machine Dialectology;
 - LSF generation and evolution scripts;
 - LSF-conditioned evaluation scripts;
+- LLM-router script for query-adaptive routing and accuracy--token evaluation;
 - raw LLM prediction records;
 - single-LSF and routed-LSF result folders.
 
