@@ -16,6 +16,13 @@
   <b>CLSR</b> · <b>MDia-v1</b> · <b>MDia-Routed-v2</b>
 </p>
 
+<p align="center">
+  <a href="https://icml.cc/virtual/2026/poster/61557"><b>📄 CLSR @ ICML 2026</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/pzqpzq/Principia"><b>🚀 Principia: Principle-First Idea Discovery</b></a>
+</p>
+
+
 ---
 
 ## Overview
@@ -46,7 +53,15 @@ Long natural-language rationales are often useful for humans, but they are not n
 
 The working hypothesis is that different LLMs have different *dialect preferences*: a concise notation that is useful for one listener model, one task family, or one reasoning regime may not be optimal for another. MDia therefore treats dialects as **receiver-relative, task-conditioned, and socially transferable artifacts**, not just as shorter prompts.
 
+
 ---
+
+## Paper and downstream application
+
+**CLSR** appears in the ICML 2026 paper **[“When LLMs Develop Languages: Symbolic Communication for Efficient Multi-Agent Reasoning”](https://icml.cc/virtual/2026/poster/61557)**. The paper introduces **Communicative Language Symbolism Routing (CLSR)** as a test-time framework where multiple LLM agents autonomously invent, evolve, share, and route compact **Language Symbolism Frameworks (LSFs)** to improve the accuracy–token trade-off.
+
+**[Principia](https://github.com/pzqpzq/Principia)** is a downstream application direction of MDia: a **principle-first automatic idea discovery system** for research ideation, literature-grounded principle mining, and structured idea management. In Principia, MDia can serve as a reasoning substrate that improves the **reasoning-token frontier** while also encouraging LLM agents to create compact symbolic systems, reusable logic operators, and compressed reasoning chains. These machine-created dialects can help transform implicit reasoning traces into deeper, more structured, and more testable research ideas.
+
 
 ## Conceptual lineage
 
@@ -83,6 +98,28 @@ The main idea is not to hand-design a formal language. Instead, the LLM proposes
 **MDia-Routed-v2** is the cleaned minimal release intended for `LSF-v2/`. It implements a routed dialect controller that selects a compact internal route from observable benchmark metadata, builds a strict JSON-oriented prompt, calls an OpenAI-compatible API, and evaluates predictions with lightweight benchmark-specific parsers.
 
 The v2 router intentionally does **not** use task IDs, gold labels, or model outputs for route selection. Its goal is a simple, auditable, metadata-only routing layer that demonstrates a strict accuracy–token frontier advantage on supplementary benchmarks.
+
+### From machine dialects to principle-first idea discovery
+
+MDia is not limited to benchmark-time reasoning compression. A natural deployment scenario is **scientific and technical idea discovery**, where the objective is not merely to produce fluent hypotheses, but to generate ideas with clear principles, evidence, assumptions, novelty contrasts, and validation paths.
+
+We are exploring this direction through **[Principia](https://github.com/pzqpzq/Principia)**, a **principle-first automatic idea discovery system**. Principia treats research ideation as a structured loop:
+
+```text
+literature evidence
+→ reusable principles
+→ idea operators
+→ traceable idea cards
+→ validation plans
+→ feedback into research memory
+```
+
+MDia can strengthen this loop in two complementary ways:
+
+1. **Reasoning-token frontier improvement.** MDia routes compact machine dialects so that Principia can spend fewer generated tokens on redundant natural-language deliberation while preserving, or improving, the quality of scientific reasoning.
+2. **Dialect-driven idea formation.** Instead of forcing every intermediate thought into ordinary prose, MDia allows LLM agents to create symbolic operators, compressed reasoning chains, and task-specific logic protocols. These machine-created dialects can act as reusable **idea operators**: they help expose hidden analogies, compress mechanism-level insights, and generate more structured, principle-grounded hypotheses.
+
+In this sense, Principia is a practical product-level instantiation of the MDia philosophy: LLMs should not only answer questions; they should develop reusable symbolic languages for thinking, teaching, routing, and discovering new ideas.
 
 ---
 
