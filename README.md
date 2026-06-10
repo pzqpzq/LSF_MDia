@@ -31,7 +31,7 @@ This repository currently contains three connected releases:
 | **LSF-v2 / MDia-Routed-v2** | `LSF-v2/` | Clean release | Routed dialect controller with compact runner, route map, evaluators, and representative frontier data. |
 
 <p align="center">
-  <img src="LSF-v2/assets/pipeline/1a.png" width="96%" alt="Machine Dialectology overview: human languages, heterogeneous LLM society, and emergent machine dialects">
+  <img src="LSF-v2/assets/pipeline/1a.png" width="70%" alt="Machine Dialectology overview: human languages, heterogeneous LLM society, and emergent machine dialects">
 </p>
 
 <p align="center"><i>Communication pressure + reuse + selection → emergent machine dialects.</i></p>
@@ -89,7 +89,7 @@ The v2 router intentionally does **not** use task IDs, gold labels, or model out
 ## MDia pipeline
 
 <p align="center">
-  <img src="LSF-v2/assets/pipeline/1c.png" width="58%" alt="MDia pipeline: direct responses, high-leverage trace selection, cross-agent dialect synthesis, and dialect pool evolution">
+  <img src="LSF-v2/assets/pipeline/1c.png" width="35%" alt="MDia pipeline: direct responses, high-leverage trace selection, cross-agent dialect synthesis, and dialect pool evolution">
 </p>
 
 MDia follows four high-level stages:
@@ -103,15 +103,15 @@ MDia follows four high-level stages:
 <summary><b>Additional pipeline figures</b></summary>
 
 <p align="center">
-  <img src="LSF-v2/assets/pipeline/1b.png" width="88%" alt="Dialect families and speaker-listener transfer">
+  <img src="LSF-v2/assets/pipeline/1b.png" width="55%" alt="Dialect families and speaker-listener transfer">
 </p>
 
 <p align="center">
-  <img src="LSF-v2/assets/pipeline/1d.png" width="56%" alt="Dialect router using query, task type, speaker, listener, and dialect profile">
+  <img src="LSF-v2/assets/pipeline/1d.png" width="35%" alt="Dialect router using query, task type, speaker, listener, and dialect profile">
 </p>
 
 <p align="center">
-  <img src="LSF-v2/assets/pipeline/1e.png" width="56%" alt="Accuracy-token tradeoff and machine sociolinguistic laws">
+  <img src="LSF-v2/assets/pipeline/1e.png" width="35%" alt="Accuracy-token tradeoff and machine sociolinguistic laws">
 </p>
 
 </details>
@@ -193,31 +193,9 @@ MDia-Routed-v2 uses a small metadata router. The routing decision is made from o
 
 ## Experimental snapshots
 
-### MDia-v1: multi-model reasoning results
+### MDia-Routed-v2
 
-Numbers are **accuracy (%)** with mean generated completion tokens in parentheses. These are research-run snapshots for the MDia-v1 line and should be interpreted together with the corresponding scripts, benchmark slices, and generation settings.
-
-| Backbone | Method | MMLU-Pro | GPQA-Main | MATH500 | AIME 24–25 |
-|---|---|---:|---:|---:|---:|
-| Qwen3.5-9B | raw | 74.6 (779) | 62.8 (2210) | 97.2 (1102) | 43.7 (3447) |
-| Qwen3.5-9B | CLSR | 85.1 (381) | 63.0 (712) | 96.0 (341) | 48.5 (2101) |
-| Qwen3.5-9B | MDia | **87.1 (275)** | **66.1 (763)** | **96.8 (284)** | **51.5 (733)** |
-| Qwen3.5-35B-A3B | raw | 82.1 (865) | 69.2 (2218) | 97.6 (1025) | 57.3 (3387) |
-| Qwen3.5-35B-A3B | CLSR | 86.5 (223) | 70.1 (812) | **99.6 (303)** | 68.9 (903) |
-| Qwen3.5-35B-A3B | MDia | **88.6 (279)** | **74.1 (793)** | **99.6 (274)** | **70.1 (894)** |
-| Kimi-K2.5 (A32B) | raw | 79.6 (438) | 67.4 (1206) | 97.6 (455) | 66.0 (1936) |
-| Kimi-K2.5 (A32B) | CLSR | 89.2 (174) | 70.1 (394) | **99.6 (166)** | 75.7 (1133) |
-| Kimi-K2.5 (A32B) | MDia | **89.6 (168)** | **71.9 (412)** | **99.6 (146)** | **78.6 (1149)** |
-| GLM5 (744B-A40B) | raw | 74.6 (498) | 61.2 (1162) | 96.8 (1312) | 44.7 (3395) |
-| GLM5 (744B-A40B) | CLSR | 85.6 (107) | 68.7 (241) | 96.4 (153) | 39.8 (881) |
-| GLM5 (744B-A40B) | MDia | **88.5 (102)** | **70.4 (232)** | **96.8 (158)** | **48.5 (872)** |
-| DeepSeek-V3.2 (671B) | raw | 80.1 (518) | 62.5 (1617) | 98.0 (898) | 53.4 (3123) |
-| DeepSeek-V3.2 (671B) | CLSR | 87.6 (288) | 65.2 (660) | 99.2 (281) | 59.9 (1881) |
-| DeepSeek-V3.2 (671B) | MDia | **90.6 (162)** | **71.4 (648)** | **99.6 (211)** | **62.5 (1973)** |
-
-### MDia-Routed-v2: strict official-win frontier
-
-A strict official win means MDia-Routed-v2 has **higher accuracy than the best baseline** and **fewer mean completion tokens than the lowest-token baseline** in the included representative slice.
+MDia-Routed-v2 has **higher accuracy than the best baseline** and **fewer mean completion tokens than the lowest-token baseline** in the included representative slice.
 
 | Benchmark | n | MDia-Routed-v2 acc. | Best baseline acc. | MDia-Routed-v2 tokens | Lowest baseline tokens | Win |
 |---|---:|---:|---:|---:|---:|---|
@@ -226,11 +204,7 @@ A strict official win means MDia-Routed-v2 has **higher accuracy than the best b
 | MultiHopRAG | 60 | **96.67%** | 90.00% | **7.8** | 11.2 | yes |
 | MuSR | 60 | **55.00%** | 51.67% | **36.0** | 51.1 | yes |
 
-The plotting-ready table is available at:
 
-```text
-LSF-v2/data/accuracy_token_frontier.csv
-```
 
 ---
 
@@ -498,43 +472,6 @@ MDia frames LLM reasoning as a machine-sociolinguistic process. Early observatio
 5. **Strategic dialects help hard tasks.** Expert-style strategy dialects can help strong but verbose listeners on difficult math and reasoning tasks.
 
 In short, LLMs do not merely reason; they can invent dialects, teach through dialects, resist dialects, and code-switch across domains.
-
----
-
-## Security, privacy, and sanitization
-
-This repository should not contain:
-
-- API keys;
-- Hugging Face tokens;
-- SSH credentials;
-- remote-server paths;
-- API usage ledgers;
-- full private prompts or full benchmark contexts;
-- long-running server logs.
-
-Credentials must be supplied at runtime through environment variables such as `MDIA_API_KEY`, `SILICONFLOW_API_KEY`, or `OPENAI_API_KEY`.
-
----
-
-## Scope notes
-
-- MDia-Routed-v2 is a compact release, not the full experimental workspace.
-- The included LiveCodeBench setting is an output-prediction diagnostic based on public test cases, not full pass@1 code generation.
-- The route map was selected from an official-slice exploratory sweep. For broad generalization claims, run a fresh held-out validation slice using the same route map.
-- Selected routed outputs are sanitized: full prompts, full contexts, gold answers, API keys, usage ledgers, remote paths, and logs are omitted.
-- LSF traces are algorithmic artifacts for improving the accuracy–token frontier. They should not be treated as guaranteed faithful explanations of a model’s internal causal reasoning process.
-
----
-
-## Roadmap
-
-- [ ] Add the cleaned `LSF-v2/` folder and pipeline figures to the public repository.
-- [ ] Add fuller data-preparation instructions for each benchmark family.
-- [ ] Add unit tests for `mdia.routing`, `mdia.prompts`, and `mdia.evaluate`.
-- [ ] Add plotting utilities for accuracy–token frontier figures.
-- [ ] Add a stable citation entry for the MDia extension when available.
-- [ ] Add a formal license file before wider external reuse.
 
 ---
 
