@@ -19,6 +19,8 @@
 <p align="center">
   <a href="https://icml.cc/virtual/2026/poster/61557"><b>📄 CLSR @ ICML 2026</b></a>
   &nbsp;·&nbsp;
+  <a href="https://openreview.net/pdf?id=ovpL0ujD6j"><b>Paper PDF</b></a>
+  &nbsp;·&nbsp;
   <a href="https://github.com/pzqpzq/Principia"><b>🚀 Principia: Principle-First Idea Discovery</b></a>
 </p>
 
@@ -531,4 +533,10 @@ A dedicated MDia citation will be added when the Machine Dialectology extension 
 
 ## Contact
 
-For questions, please open an issue in this repository.
+**Academic collaboration**  
+In collaboration with the **[Institute of Computing Technology, Chinese Academy of Sciences](https://english.ict.cas.cn/)**.  
+Contact: [peizhengqi22@mails.ucas.ac.cn](mailto:peizhengqi22@mails.ucas.ac.cn)
+
+**Business collaboration**  
+In collaboration with **Beijing Chipflow Technology Co., Ltd.**. 
+Contact: [peizhengqi@chipflow.net](mailto:peizhengqi@chipflow.net)
