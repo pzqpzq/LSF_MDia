@@ -5,6 +5,7 @@
 </p>
 
 <p align="center">
+  <a href="https://arxiv.org/abs/2606.29354"><img src="https://img.shields.io/badge/arXiv-2606.29354-B31B1B.svg?logo=arxiv" alt="Arxiv"></a>
   <a href="https://github.com/pzqpzq/LSF_MDia"><img alt="Repository" src="https://img.shields.io/badge/repo-LSF__MDia-181717?logo=github"></a>
   <img alt="Python" src="https://img.shields.io/badge/python-3.10%2B-blue">
   <img alt="LLM only" src="https://img.shields.io/badge/inference-LLM--only-purple">
@@ -19,7 +20,9 @@
 <p align="center">
   <a href="https://icml.cc/virtual/2026/poster/61557"><b>📄 CLSR @ ICML 2026</b></a>
   &nbsp;·&nbsp;
-  <a href="https://openreview.net/pdf?id=ovpL0ujD6j"><b>Paper PDF</b></a>
+  <a href="https://arxiv.org/abs/2606.29354"><b>ArXiv</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://openreview.net/pdf?id=ovpL0ujD6j"><b>OpenReview</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/pzqpzq/Principia"><b>🚀 Principia: Principle-First Idea Discovery</b></a>
 </p>
