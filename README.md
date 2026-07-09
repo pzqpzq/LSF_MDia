@@ -63,7 +63,7 @@ The working hypothesis is that different LLMs have different *dialect preference
 
 ## Paper and downstream application
 
-**CLSR** appears in the ICML 2026 paper **[“When LLMs Develop Languages: Symbolic Communication for Efficient Multi-Agent Reasoning”](https://icml.cc/virtual/2026/poster/61557)**. The paper introduces **Communicative Language Symbolism Routing (CLSR)** as a test-time framework where multiple LLM agents autonomously invent, evolve, share, and route compact **Language Symbolism Frameworks (LSFs)** to improve the accuracy–token trade-off.
+**CLSR** appears in the ICML 2026 paper **[“When LLMs Develop Languages: Symbolic Communication for Efficient Multi-Agent Reasoning”](https://icml.cc/virtual/2026/poster/61557)** (ArXiv: [https://arxiv.org/abs/2606.29354](https://arxiv.org/abs/2606.29354)). The paper introduces **Communicative Language Symbolism Routing (CLSR)** as a test-time framework where multiple LLM agents autonomously invent, evolve, share, and route compact **Language Symbolism Frameworks (LSFs)** to improve the accuracy–token trade-off.
 
 **[Principia](https://github.com/pzqpzq/Principia)** is a downstream application direction of MDia: a **principle-first automatic idea discovery system** for research ideation, literature-grounded principle mining, and structured idea management. In Principia, MDia can serve as a reasoning substrate that improves the **reasoning-token frontier** while also encouraging LLM agents to create compact symbolic systems, reusable logic operators, and compressed reasoning chains. These machine-created dialects can help transform implicit reasoning traces into deeper, more structured, and more testable research ideas.
 
