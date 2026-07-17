@@ -531,6 +531,7 @@ If you use this repository, please cite the CLSR paper and this repository.
 ```
 
 A dedicated MDia citation will be added when the Machine Dialectology extension is finalized.
+See our uploaded MDia_Jul17.pdf file, which is a pre-preprint version of our **Machine Dialectology**.
 
 ---
 
