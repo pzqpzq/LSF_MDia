@@ -1,139 +1,266 @@
-MDia is the primary framework; CLSR is its homogeneous-agent, concrete-LSF-routing special case.
+<div align="center">
 
-# Machine Dialectology (MDia)
+<h1>Machine Dialectology (MDia)</h1>
 
-MDia is a test-time framework in which heterogeneous language-model agents create, inherit, exchange, profile, select, and route compact **Language Symbolism Frameworks (LSFs)**. An LSF is a persistent machine-dialect card, not a one-off shortened answer: it records a symbol inventory, grammar or schema, reasoning operators, validity rules, an answer contract, provenance, and validation evidence.
+<p><strong>Reusable symbolic protocols for heterogeneous language-model societies.</strong></p>
 
-This repository now has one supported implementation under `src/mdia/`. The former `LSF-v0-draft`, `LSF-v1`, and `LSF-v2` trees are preserved under [`legacy/`](legacy/README.md) for provenance and are not the public API.
+<p>
+MDia studies how LLMs invent reasoning dialects, teach through them, resist them, and code-switch across tasks.
+</p>
 
-- MDia manuscript: [`papers/MDia_Jul17.pdf`](papers/MDia_Jul17.pdf)
-- CLSR paper: [When LLMs Develop Languages: Symbolic Communication for Efficient Multi-Agent Reasoning](https://arxiv.org/abs/2606.29354)
-- Related project: [Principia](https://github.com/pzqpzq/Principia)
+<p>
+  <a href="https://github.com/pzqpzq/LSF_MDia/actions/workflows/ci.yml"><img src="https://github.com/pzqpzq/LSF_MDia/actions/workflows/ci.yml/badge.svg" alt="CI status" /></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white" alt="Python 3.10 or newer" /></a>
+  <img src="https://img.shields.io/badge/MDia-v1.0.0-0E7490" alt="MDia version 1.0.0" />
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-2EA44F" alt="MIT License" /></a>
+</p>
 
-## The pipeline
+<p>
+  <a href="https://icml.cc/virtual/2026/poster/61557"><img src="https://img.shields.io/badge/CLSR-ICML%202026-6F42C1" alt="CLSR at ICML 2026" /></a>
+  <a href="https://arxiv.org/abs/2606.29354"><img src="https://img.shields.io/badge/CLSR-arXiv%3A2606.29354-B31B1B?logo=arxiv&logoColor=white" alt="CLSR paper on arXiv" /></a>
+  <img src="https://img.shields.io/badge/Interface-black--box%20LLMs-111827" alt="Black-box LLM compatible" />
+</p>
 
-```mermaid
-flowchart LR
-    A["collect<br/>heterogeneous direct traces"] --> B["create<br/>generation-0 cards"]
-    B --> C["evolve<br/>inherit and borrow"]
-    C --> D["profile<br/>speaker-listener transfer"]
-    D --> E["select<br/>freeze validated cards"]
-    E --> F["run<br/>route, execute, evaluate"]
-    D --> G["validate-rules<br/>audit social hypotheses"]
-    F --> H["report<br/>provenance and metrics"]
-    G --> H
-```
+<p>
+  <a href="#overview">Overview</a> ·
+  <a href="#quickstart">Quickstart</a> ·
+  <a href="#canonical-pipeline">Pipeline</a> ·
+  <a href="#routing-semantics">Routing</a> ·
+  <a href="#research-snapshot">Research</a> ·
+  <a href="#reproducibility-by-construction">Reproducibility</a> ·
+  <a href="#documentation">Documentation</a> ·
+  <a href="#citation">Citation</a>
+</p>
 
-The implementation keeps four immutable partitions: `induction`, `evolution_validation`, `router_validation`, and `test`. Creation and evolution use only their designated partitions; profile-based route selection is frozen from validation evidence before any test prediction is scored.
+</div>
 
-## Quickstart: a complete offline run
+<p align="center">
+  <a href="assets/readme/pipeline-Jul15-v0.png">
+    <img src="assets/readme/pipeline-Jul15-v0.png" width="100%" alt="Machine Dialectology main figure. Panel A motivates machine-oriented reasoning languages by contrasting verbose human-readable chain-of-thought with the accuracy-token frontier. Panel B represents reusable Language Symbolism Frameworks as dialect cards with symbols, operators, state variables, rules, and answer contracts. Panel C shows asymmetric speaker-listener transfer, model social profiles, and profile-aware routing. Panel D summarizes a 100-rule bank and supported machine-sociolinguistic regularities." />
+  </a>
+</p>
 
-Python 3.10 or newer is required. The toy preset uses redistributable fixtures and a deterministic replay provider, so it needs no API key or model download.
+<p align="center">
+  <sub><strong>Machine Dialectology: from verbose reasoning traces to a measurable ecology of machine dialects.</strong> Click the figure to inspect the full-resolution manuscript asset.</sub>
+</p>
+
+---
+
+## Overview
+
+Large language models increasingly operate as heterogeneous systems of solvers, routers, critics, and tool users. Yet their intermediate reasoning is still usually expressed as human-facing prose. Natural language is readable and flexible, but it can spend generated tokens on discourse, pedagogy, and surface conventions that a machine listener may not need. Simply forcing shorter answers is not enough: aggressive compression can remove variables, evidence links, parse commitments, verification state, or output contracts that the listener *does* need.
+
+**Machine Dialectology (MDia)** treats an intermediate trace as a message produced by one machine component and interpreted by another. Speaker models create persistent **Language Symbolism Frameworks (LSFs)**—compact dialect cards with symbols, grammar, reusable operators, validity rules, answer contracts, provenance, and empirical transfer profiles. Listener models execute those dialects, and MDia routes them under explicit accuracy, token, parseability, and reliability constraints.
+
+> **Central thesis**
+>
+> A machine dialect is not intrinsically strong or weak. Its value is relational:
+>
+> **dialect utility = f(speaker, listener, task, route, budget).**
+
+> [!IMPORTANT]
+> This repository is **MDia-first**. **CLSR** is the homogeneous-agent, concrete-LSF-routing special case configured through [`configs/clsr.yaml`](configs/clsr.yaml). The supported implementation lives under [`src/mdia/`](src/mdia/); historical research workspaces remain under [`legacy/`](legacy/README.md) for provenance and are not the public API.
+
+### At a glance
+
+| Dimension | MDia |
+|---|---|
+| **Scientific object** | A reusable machine dialect represented as a persistent LSF card |
+| **Unit of analysis** | A speaker–listener–dialect–task event |
+| **Core lifecycle** | Collect → create → evolve → profile → select → route → validate → report |
+| **Inference plans** | `single`, `aggregate`, `compose`, and guarded `abstain/raw-fallback` |
+| **Compatibility** | Discrete, archivable, auditable, and compatible with black-box LLM APIs |
+| **Selection principle** | Freeze dialects and route policies from validation evidence before held-out execution |
+| **Research scope** | Accuracy–token frontiers, cross-model transfer, listener openness/resistance, publicness, teaching advantage, code-switching, and negative-transfer guards |
+
+## Why machine dialectology?
+
+| Conventional view | MDia view |
+|---|---|
+| A reasoning trace is primarily an explanation for people. | A reasoning trace is also a machine-to-machine protocol. |
+| Shorter traces are automatically better. | Compression is useful only when the right state survives for a particular listener. |
+| A prompt or language has one global quality score. | Dialect utility is receiver-relative and task-conditioned. |
+| A stronger solver should also be a stronger teacher. | Weak or specialized speakers can produce highly adoptable public dialects. |
+| More agents mainly imply voting, debate, or longer deliberation. | Agents can invent, inherit, borrow, teach, resist, and code-switch between dialects. |
+| Hidden-state access may be required for compact communication. | MDia uses discrete protocols that can be stored, hashed, compared, and routed across black-box models. |
+
+This perspective separates **brevity** from **communicative adequacy**. The objective is not to minimize tokens in isolation; it is to preserve the task-relevant state that a specific listener can reliably interpret under a budget.
+
+## Quickstart
+
+The deterministic toy pipeline exercises the complete lifecycle with redistributable fixtures. It requires **Python 3.10+**, no API key, and no model download.
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
+
 mdia pipeline --config configs/toy_mdia.yaml
 ```
 
-The command creates a versioned directory beneath `runs/` containing the split manifest, direct traces, dialect generations, transfer profiles, a frozen bank, route plans, predictions, rule results, and a reproducibility report. Re-running with the same configuration and seed selects the same cards and routes.
-
-To inspect the commands:
+The command creates a versioned run directory containing immutable split manifests, direct traces, dialect generations, transfer profiles, a frozen dialect bank, route plans, predictions, token accounting, rule results, and a reproducibility report. Re-running with the same configuration and seed selects the same cards and routes.
 
 ```bash
 mdia --help
 mdia pipeline --help
 ```
 
-## Run one stage at a time
+<details>
+<summary><strong>Expected artifact groups</strong></summary>
 
-Each stage consumes the validated artifacts from the preceding stage in the same run directory.
+```text
+runs/<run_id>/
+  manifest.json
+  report.md
+  splits/{induction,evolution_validation,router_validation,test}.json
+  direct_traces.jsonl
+  dialects/generation-*.json
+  profiles/{evolution_validation,router_validation}.jsonl
+  selection/frozen_dialect_bank.json
+  execution/{route_plans,predictions,evaluations}.jsonl
+  execution/token_accounting.json
+  rules/{registry,results}.json
+```
 
-| Stage | Command | Principal output |
+Every value in the report is designed to resolve back to a run artifact, evaluator version, count, and checksum.
+
+</details>
+
+## From CLSR to MDia
+
+[CLSR](https://arxiv.org/abs/2606.29354) introduced the create–evolve–route lifecycle for reusable LSFs inside a homogeneous model community. MDia retains this foundation and expands the unit of analysis to heterogeneous speaker–listener interactions.
+
+| Aspect | CLSR | MDia |
 |---|---|---|
-| Collect direct answers | `mdia collect --config configs/toy_mdia.yaml` | `direct_traces.jsonl` |
-| Create initial cards | `mdia create --config configs/toy_mdia.yaml` | generation-0 dialect bank |
-| Iterate cards | `mdia evolve --config configs/toy_mdia.yaml` | generation checkpoints |
-| Measure transfer | `mdia profile --config configs/toy_mdia.yaml` | transfer matrix and profiles |
-| Freeze candidates | `mdia select --config configs/toy_mdia.yaml` | frozen dialect-bank manifest |
-| Route and score | `mdia run --config configs/toy_mdia.yaml` | route plans and predictions |
-| Validate rules | `mdia validate-rules --config configs/toy_mdia.yaml` | rule results and evidence links |
-| Build the report | `mdia report --config configs/toy_mdia.yaml` | reproducibility report |
+| **Community** | Homogeneous or same-family LLM agents | Heterogeneous model families and scales |
+| **Primary object** | Reusable LSFs optimized for the accuracy–token frontier | A dialect ecology indexed by speaker, listener, task, route, and budget |
+| **Cold start** | Initial LSFs induced from task exemplars | Direct traces become high-leverage evidence; no human-authored meta-dialect is required |
+| **Transfer** | LSF reuse and routing within a model community | Explicit self-dialect and foreign-dialect transfer matrices |
+| **Profiles** | Accuracy, cost, domains, and failure modes | Publicness, openness, resistance, teaching advantage, task affinity, and compression tolerance |
+| **Routing** | Select, aggregate, or compose LSFs per query | Profile-, task-, risk-, and budget-aware dialect routing across listeners |
+| **Scientific outcome** | Efficient symbolic reasoning protocols | Efficient protocols plus measurable machine-sociolinguistic regularities |
+| **Software** | [`configs/clsr.yaml`](configs/clsr.yaml) | The general schema and canonical CLI under [`src/mdia/`](src/mdia/) |
 
-Use [`configs/clsr.yaml`](configs/clsr.yaml) for the homogeneous CLSR preset. Paper-oriented configurations live in [`configs/paper/`](configs/paper/) and require the corresponding licensed datasets and provider access; they are not part of the offline smoke test.
+CLSR is therefore not an obsolete package generation, and MDia is not a cosmetic renaming. Both are configurations of the same supported implementation, with MDia as the general framework.
 
-## What does the router route?
+## The scientific object: a dialect card
 
-This distinction resolves the ambiguity in the former v1/v2 names.
+A dialect card implements the manuscript contract
 
-| Interface | It selects | Its output | Role |
+<div align="center">
+
+**D = (V, G, O, R, ρ)**
+
+</div>
+
+| Field | Meaning |
+|---|---|
+| **V — symbol inventory** | Compact names, tags, operators, and state markers |
+| **G — grammar / schema** | The compositional form and parseable output structure |
+| **O — reasoning operators** | Reusable transformations, checks, decompositions, and verification actions |
+| **R — rules** | Validity, usage, avoidance, stopping, and fallback constraints |
+| **ρ — empirical profile** | Validation utility, token statistics, failure modes, task affinity, and listener compatibility |
+
+Cards also carry stable IDs, generation and parent links, creator/speaker provenance, task tags, I/O contracts, fallbacks, and a digest of the complete specification. This makes a dialect a persistent research artifact—not a one-off shortened answer or an unversioned prompt string.
+
+## Canonical pipeline
+
+The public CLI separates eight stages that older research scripts mixed together.
+
+| Stage | Command | What is frozen or produced |
+|---:|---|---|
+| **1. Collect** | `mdia collect --config configs/toy_mdia.yaml` | Gold-free direct traces with model revision, seed, parsed output, score, tokens, latency, and cost |
+| **2. Create** | `mdia create --config configs/toy_mdia.yaml` | Generation-0 cards induced from correct, concise, and optionally speaker-diverse traces |
+| **3. Evolve** | `mdia evolve --config configs/toy_mdia.yaml` | Atomic generation checkpoints with inheritance, borrowing, evidence, hashes, and validation-saturation stopping |
+| **4. Profile** | `mdia profile --config configs/toy_mdia.yaml` | Speaker–listener transfer records, confidence intervals, parse risk, cost, and task-conditioned utility |
+| **5. Select** | `mdia select --config configs/toy_mdia.yaml` | A validation-frozen, Pareto-filtered, diversity-aware dialect-bank manifest |
+| **6. Run** | `mdia run --config configs/toy_mdia.yaml` | Budgeted route plans, predictions, evaluations, and complete token accounting |
+| **7. Validate rules** | `mdia validate-rules --config configs/toy_mdia.yaml` | Evidence-linked `RuleResult` records; insufficient evidence becomes `not_evaluated` |
+| **8. Report** | `mdia report --config configs/toy_mdia.yaml` | A provenance-linked separation of held-out performance, route validation, and mechanism analysis |
+
+The implementation preserves four immutable partitions:
+
+| Partition | Permitted use |
+|---|---|
+| `induction` | Collect direct traces and create generation 0 |
+| `evolution_validation` | Evaluate/update generations and decide saturation |
+| `router_validation` | Build profiles, compare route policies, and freeze route settings |
+| `test` | Execute the frozen bank and policy; never modify cards, profiles, or routes |
+
+## Routing semantics
+
+### What does the router route?
+
+| Interface | It selects | Output | Role |
 |---|---|---|---|
-| `DialectRouter` | Concrete, frozen evolved LSF cards | Stable dialect IDs plus specification digests | Primary MDia and CLSR routing |
+| `DialectRouter` | Concrete, frozen, evolved LSF cards | Stable dialect IDs and specification digests | Primary MDia and CLSR routing |
 | `ControllerRouter` | A metadata-conditioned answer/controller family, such as schema-first or verifier-rich | A controller ID and answer contract | Optional policy layer for format-sensitive tasks |
 
-`DialectRouter` supports `single`, `aggregate`, `compose`, and guarded `abstain/raw-fallback` plans. Aggregate policies distinguish majority, validation-weighted, score-based, and judge aggregation. Every plan is limited by an explicit generated-token budget and stopping rule.
+The distinction is deliberate. A controller choice is not reported as a concrete-LSF route. A canonical run may record both, but the two decisions remain separate in artifacts and evaluation.
 
-The archived former v2 package is a **controller router**: it maps observable benchmark metadata to handcrafted prompt strategies. It does not retrieve evolved LSF cards. A canonical run may record both choices, but it never calls the controller choice a concrete-LSF route.
+### Supported plans
 
-Before generation, either router may use query text and observable metadata, listener profiles, frozen validation statistics, and budget information. It cannot access gold labels, test outcomes, or feedback from a candidate answer.
+| Plan | Semantics | Typical use |
+|---|---|---|
+| `single` | Execute one selected dialect card | Low-cost default when validation evidence is decisive |
+| `aggregate` | Execute several cards independently, then combine by named majority, validation-weighted, score-based, or judge aggregation | Ambiguous items where controlled redundancy is useful |
+| `compose` | Execute an ordered planner/solver/verifier-style sequence with bounded rounds | Hard tasks requiring staged symbolic state and verification |
+| `abstain/raw-fallback` | Avoid a predicted dialect mismatch and use the configured raw-answer policy | Resistant listeners, insufficient support, or foreign-dialect risk |
 
-## MDia and CLSR
+Before generation, routing may use the query, observable task metadata, listener profiles, frozen validation statistics, and the token budget. It may not use gold labels, held-out outcomes, or feedback from a candidate answer.
 
-CLSR introduced the create-evolve-route lifecycle for reusable LSFs in a homogeneous model community. MDia retains that lifecycle and expands the unit of analysis to a **speaker-listener-dialect-task event** across heterogeneous model families.
+## Research snapshot
 
-The `clsr.yaml` preset therefore:
+The July 30 MDia manuscript source reports the following aggregate picture across **eight benchmark columns**: MMLU-Pro, GPQA-main, MATH500, AIME 2024–25, BFCL-v3, LiveCodeBench-output, MultiHopRAG, and MuSR.
 
-- constrains creators, speakers, and listeners to one backbone community;
-- keeps concrete-card single, aggregate, and compose routing;
-- includes a fixed-single, validation-profiled baseline; and
-- disables claims that require cross-family ecology or transfer.
+| Result | Manuscript-reported value |
+|---|---:|
+| Macro-accuracy gain over the strongest matched token-reduction baseline | **+3.6 points** |
+| Macro-accuracy gain over Raw CoT | **+3.1 points** |
+| Mean reduction in generated completion tokens | **71%** |
+| Audited machine-sociolinguistic rules | **100** |
+| Rules with full or strong support | **19** (`6` full + `13` strong) |
 
-CLSR is not “v0” of the public package and MDia is not “v2.” Both are configurations of the same schema and CLI, with MDia as the general framework.
+> [!NOTE]
+> These are **paper-level findings**, not automatic guarantees from installing the package. The offline fixture verifies schemas, lifecycle logic, routing, provenance, and deterministic execution. Reproducing a named manuscript table requires the exact model revisions, task manifests, evaluators, seeds, provider settings, and release artifacts described by the paper protocol.
 
-## Dialect lifecycle
+### Representative regularities
 
-A card implements the manuscript contract `D = (V, G, O, R, rho)`:
+| Regularity | Operational interpretation |
+|---|---|
+| **Receiver-relative utility** | The same dialect can help one listener, constrain another, and fail for a third. |
+| **Listener-openness asymmetry** | Models differ systematically in how much they benefit from foreign dialects. |
+| **Public-dialect asymmetry** | Some speaker dialects transfer broadly; others remain effective mainly as private self-talk. |
+| **Weak-speaker teaching** | A weaker solver can still produce a highly adoptable teaching dialect. |
+| **Foreign-dialect risk** | Imported protocols require validation support and explicit negative-transfer guards. |
+| **Route simplicity** | A single well-matched dialect can outperform unnecessary over-composition. |
+| **Cost-sensitive utility** | A route must be evaluated jointly on correctness, generated tokens, parse risk, latency, and budget. |
 
-- `V`: finite symbol inventory;
-- `G`: grammar or output schema;
-- `O`: reusable reasoning operators;
-- `R`: validity, usage, and avoidance rules; and
-- `rho`: empirical profile, including validation utility, cost, failure modes, and listener compatibility.
+The rule bank is deliberately conservative. Supported labels are evidence statements for the audited archive, not claims of universal laws or human-equivalent language emergence. Weak, boundary, and unsupported analogies are retained to constrain overclaiming.
 
-Cards also carry a stable ID, generation, parents, speaker/creator provenance, task tags, I/O contract, fallback, and a digest of the complete specification. Correct direct traces are ranked by completion-token count per item; optional speaker-diversity constraints prevent one model from monopolizing generation 0. Evolution preserves vertical inheritance and records horizontal borrowing. Selection uses validation profiles, minimum support, Pareto filtering, and diversity constraints - never filename order or test accuracy.
+## Reproducibility by construction
 
-See [Pipeline and artifacts](docs/pipeline.md) and [Architecture](docs/architecture.md) for the complete data flow and extension interfaces.
+MDia is organized as an auditable research system rather than a directory of loosely coupled scripts.
 
-## Sociolinguistic rule bank
+| Guarantee | Implementation |
+|---|---|
+| **Leakage control** | Creation, evolution, routing validation, and testing use separate immutable partitions. |
+| **Validation-frozen decisions** | Card selection and route settings are fixed before held-out predictions are scored. |
+| **Stable identity** | Items and dialect cards carry content-derived IDs, hashes, provenance, and specification digests. |
+| **Explicit accounting** | Every dialect-conditioned completion and generated aggregation/judge output is counted; prompt tokens remain available for cache-aware analysis. |
+| **Evidence-aware rules** | Missing fields or insufficient support yield `not_evaluated`, never a fabricated positive result. |
+| **Deterministic smoke test** | The toy provider and fixtures exercise the full lifecycle without external credentials. |
+| **Quality gates** | CI covers Python 3.10–3.12, Ruff, formatting, mypy, pytest, Markdown link integrity, release hygiene, and secret scanning. |
 
-MDia operationalizes 100 falsifiable hypotheses across seven manuscript families:
-
-1. receiver/listener;
-2. speaker/publicness;
-3. task-conditioned;
-4. compression/redundancy;
-5. routing/code-switching;
-6. archive/evolution; and
-7. robustness, scale, and deployment.
-
-The manuscript reports **full or strong support for 19 rules** in its audited archive, including listener-openness asymmetry, public-dialect asymmetry, weak-speaker teaching, foreign-dialect risk, route simplicity, task-aware routing, parser-compatible compactness, and negative-transfer guards. These labels are paper evidence, not universal laws and not automatically reproduced by installing this package.
-
-The CLI preserves the manuscript label (`full`, `strong`, `partial`, `weak`, `boundary`, or `unsupported`) separately from the status of the current execution. If required data are absent, the result is `not_evaluated`; legacy heuristic scores are never promoted to fresh validation evidence. Multiple-testing correction is applied within each of the seven families.
-
-See [Rule validation](docs/rules.md) for evidence streams, statistics, and reporting limits.
-
-## Reproduction levels
+### Reproduction levels
 
 | Tier | Requires | Purpose |
 |---|---|---|
-| Offline fixture | This repository only | Verify schemas, lifecycle, routing, rules, and deterministic provenance |
-| Adapter run | User-supplied or public-compatible dataset plus provider | Exercise MDia on a new model/task without claiming paper reproduction |
-| Paper protocol | Exact manifests, model revisions, evaluators, seeds, and release artifacts | Reproduce a named manuscript table or analysis |
+| **Offline fixture** | This repository only | Verify schemas, lifecycle, routing, rule validation, and deterministic provenance |
+| **Adapter run** | A compatible dataset plus provider | Exercise MDia on a new model/task without claiming paper reproduction |
+| **Paper protocol** | Exact manifests, model revisions, evaluators, seeds, and release artifacts | Reproduce a named manuscript result or analysis |
 
-Only redistributable fixtures and compact example artifacts belong in Git. Larger sanitized archives should be published as versioned release assets with SHA-256 manifests. Restricted benchmark text, API usage ledgers, full private prompts, credentials, and remote paths must not be committed. Lightweight evaluators are diagnostic unless a benchmark's official harness adapter is used.
-
-Read [Reproduction and data policy](docs/reproduction.md) before interpreting any number.
+Only redistributable fixtures and compact example artifacts should be committed. Restricted benchmark text, private prompts, credentials, provider ledgers, and remote paths do not belong in Git. See [Reproduction and data policy](docs/reproduction.md) before interpreting or publishing results.
 
 ## Repository map
 
@@ -143,35 +270,97 @@ configs/           offline, CLSR, and paper-oriented presets
 examples/toy/      redistributable deterministic fixture
 artifacts/example/ committed complete offline example output
 docs/              architecture, pipeline, reproduction, extension, and rules
-papers/            manuscript snapshot included with this release
+papers/            manuscript snapshot included with the repository
 legacy/            archived v0/v1/v2 research workspaces; noncanonical
 tests/             unit, leakage, integration, and offline end-to-end checks
 ```
 
-## Documentation
+<details>
+<summary><strong>Legacy workspace map</strong></summary>
 
-- [Architecture](docs/architecture.md)
-- [Pipeline and artifacts](docs/pipeline.md)
-- [Paper-to-code map](docs/paper-to-code.md)
-- [Reproduction and data policy](docs/reproduction.md)
-- [Extending datasets and providers](docs/extending.md)
-- [Rule validation](docs/rules.md)
-- [Legacy history](docs/legacy.md)
-
-## Legacy workspaces
-
-| Historical name | Archived location | What it actually contains |
+| Historical name | Archived location | What it contains |
 |---|---|---|
 | `LSF-v0-draft` | [`legacy/clsr-v0-workspace/`](legacy/clsr-v0-workspace/STATUS.md) | Early CLSR scripts and the recovered meta-LSF prompt bank |
 | `LSF-v1` | [`legacy/mdia-v1-workspace/`](legacy/mdia-v1-workspace/STATUS.md) | Heterogeneous LSF evolution, concrete-card transfer, and experimental routing artifacts |
 | `LSF-v2` | [`legacy/mdia-strategy-router-v2/`](legacy/mdia-strategy-router-v2/STATUS.md) | Metadata-conditioned handcrafted strategy/controller routing, not evolved-card routing |
 
-The snapshot tag `pre-mdia-reorg-2026-07-30` points to the repository immediately before this migration. Legacy code is retained for auditability; use the root package for new work.
+The tag `pre-mdia-reorg-2026-07-30` points to the snapshot immediately before the canonical package migration.
 
-## Security
+</details>
 
-Use `.env.example` as a list of environment-variable names if a non-offline provider needs credentials. Export them through your shell or secret manager; the package does not parse `.env` files. Never place a secret in YAML, JSON, Python, a command transcript, or an experiment artifact. Generated model text in `legacy/` is untrusted data and must never be executed. Credentials previously present in private remote workspaces are outside this release and must be rotated by their owner before any remote-derived artifact is published.
+## Documentation
 
-## Citation and license
+| Guide | Use it for |
+|---|---|
+| [Architecture](docs/architecture.md) | Core abstractions, schemas, extension interfaces, and module boundaries |
+| [Pipeline and artifacts](docs/pipeline.md) | Stage contracts, partition rules, commands, and output artifacts |
+| [Paper-to-code map](docs/paper-to-code.md) | Mapping manuscript concepts and claims to implementation components |
+| [Reproduction and data policy](docs/reproduction.md) | Evidence tiers, release hygiene, benchmark restrictions, and interpretation limits |
+| [Extending datasets and providers](docs/extending.md) | Adding new tasks, evaluators, model providers, and adapters |
+| [Rule validation](docs/rules.md) | Rule families, evidence streams, statistics, correction, and reporting |
+| [Legacy history](docs/legacy.md) | Provenance and status of earlier research workspaces |
 
-Use [`CITATION.cff`](CITATION.cff) for software citation and cite the relevant MDia and/or CLSR manuscript for research claims. Code is released under the [MIT License](LICENSE). Dataset and model licenses remain with their respective owners.
+## Research agenda
+
+MDia provides an experimental substrate for questions that ordinary prompt optimization does not expose:
+
+- Which dialects become **public teaching languages**, and which remain private self-talk?
+- Which listener properties predict **openness**, **resistance**, or compression failure?
+- When should a router select one dialect, aggregate several, compose stages, or fall back to raw reasoning?
+- Can dialect families be inherited and recombined without losing provenance or listener compatibility?
+- How do machine dialect ecologies change across model generations, domains, modalities, and tool-use settings?
+- Can learned dialects improve production inference while preserving auditable, human-readable final answers?
+
+## Downstream application: Principia
+
+[Principia](https://github.com/pzqpzq/Principia) is a principle-first idea-discovery system and a downstream application direction for MDia. Machine dialects can serve as reusable reasoning substrates for improving the reasoning–token frontier and for organizing compact symbolic operators, evidence states, and logic chains during research ideation. MDia remains the general communication and routing framework; Principia applies that capability to structured idea discovery.
+
+## Contributing and discussion
+
+Issues are welcome for reproducibility reports, provider or dataset adapters, routing failures, rule-validation questions, and paper-to-code discrepancies. A useful technical report should include the MDia version, configuration, run ID, model/provider revision, split hashes, evaluator version, selected dialect IDs/digests, and the smallest redistributable artifact needed to reproduce the observation.
+
+Please do not post credentials, restricted benchmark content, private prompts, or unredacted provider logs.
+
+## Citation
+
+Use [`CITATION.cff`](CITATION.cff) for software citation. For the homogeneous CLSR method, cite:
+
+```bibtex
+@inproceedings{pei2026clsr,
+  title     = {When LLMs Develop Languages: Symbolic Communication for Efficient Multi-Agent Reasoning},
+  author    = {Pei, Zhengqi and Huang, Qingming and Wang, Shuhui},
+  booktitle = {Proceedings of the 43rd International Conference on Machine Learning},
+  year      = {2026}
+}
+```
+
+- **CLSR paper:** [arXiv:2606.29354](https://arxiv.org/abs/2606.29354)
+- **CLSR conference page:** [ICML 2026](https://icml.cc/virtual/2026/poster/61557)
+- **MDia manuscript snapshot:** [`papers/MDia_Jul17.pdf`](papers/MDia_Jul17.pdf)
+
+## Security and license
+
+Use [`.env.example`](.env.example) only as a list of environment-variable names. Export credentials through your shell or secret manager; never place a secret in YAML, JSON, Python, command transcripts, experiment artifacts, or issue reports. Generated model text—especially under `legacy/`—must be treated as untrusted data and never executed without validation.
+
+Code is released under the [MIT License](LICENSE). Dataset and model licenses remain with their respective owners.
+
+## Contact
+
+**Academic collaboration**  
+In collaboration with the [Institute of Computing Technology, Chinese Academy of Sciences](https://english.ict.cas.cn/).  
+Contact: `peizhengqi22@mails.ucas.ac.cn`
+
+**Business collaboration**  
+In collaboration with Beijing Chipflow Technology Co., Ltd.  
+Contact: `peizhengqi@chipflow.net`
+
+
+---
+
+<div align="center">
+
+**Reasoning languages can be machine-oriented rather than human-oriented.**
+
+<sub>MDia turns that hypothesis into an auditable lifecycle of dialect invention, transfer, routing, and measurement.</sub>
+
+</div>
