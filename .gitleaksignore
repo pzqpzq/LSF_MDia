@@ -1,0 +1,3 @@
+# Deterministic SHA-256 for execution/token_accounting.json in the toy example.
+# Gitleaks associates the artifact path's "token" substring with the checksum.
+693d3aa30e065ae3d8d047f884e271f6eb4739ba:artifacts/example/manifest.json:generic-api-key:10
